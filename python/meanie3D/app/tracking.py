@@ -179,13 +179,13 @@ def run(config,time_index):
         # the first time step
         if time_index <= 0:
             # TODO: consider scenario where user opted not to remove previous results?
-            print "Removing results from previous runs"
+            print("Removing results from previous runs")
             utils.create_ouput_directories(output_dir)
     else:
         resume_at_index = utils.number_of_netcdf_files(output_dir+"/netcdf")
         if time_index >= 0 and time_index < resume_at_index:
             return
-        print "Resuming at index " + str(resume_at_index)
+        print("Resuming at index " + str(resume_at_index))
 
     # Get a list of the files we need to process.
     source = utils.getValueForKeyPath(config,'source_directory')
@@ -214,9 +214,9 @@ def run(config,time_index):
             cluster_file = cluster_file + "-" + str(time_index)
         cluster_file += "-clusters.nc"
 
-        print "-------------------------------------------------------------------------------------"
-        print "Processing " + netcdf_file
-        print "-------------------------------------------------------------------------------------"
+        print("-------------------------------------------------------------------------------------")
+        print("Processing " + netcdf_file)
+        print("-------------------------------------------------------------------------------------")
 
         # ----------------------------------------------
         # Clustering
@@ -231,7 +231,7 @@ def run(config,time_index):
                 run_count = run_count + 1
                 continue
 
-            print "-- Clustering --"
+            print("-- Clustering --")
 
             # build the clustering command
             params = detect_params
@@ -280,11 +280,11 @@ def run(config,time_index):
             if config['time_operations']:
                 start_time = time.time()
 
-            print "meanie3D-detect " + params
+            print("meanie3D-detect " + params)
             external.execute_command("meanie3D-detect",params,True)
 
             if config['time_operations']:
-                print "Finished. (%.2f seconds)" % (time.time()-start_time)
+                print("Finished. (%.2f seconds)" % (time.time()-start_time))
 
 
         # ----------------------------------------------
@@ -300,7 +300,7 @@ def run(config,time_index):
                 else:
                     logfile = output_dir+"/log/tracking_" + str(time_index)+".log"
 
-                print "-- Tracking --"
+                print("-- Tracking --")
                 params = tracking_params + " --previous  %s --current %s " \
                                % (os.path.abspath(last_cluster_file),os.path.abspath(cluster_file))
                 params = params + " > " + os.path.abspath(logfile)
@@ -309,11 +309,11 @@ def run(config,time_index):
                 if config['time_operations']:
                     start_time = time.time()
 
-                print "meanie3D-track" + params
+                print("meanie3D-track" + params)
                 external.execute_command("meanie3D-track",params,True)
 
                 if config['time_operations']:
-                    print "Finished. (%.2f seconds)" % (time.time()-start_time)
+                    print("Finished. (%.2f seconds)" % (time.time()-start_time))
 
         # keep track
         last_cluster_file = cluster_file
@@ -323,8 +323,8 @@ def run(config,time_index):
 
         # Clean out the trash if there is any
         if config['cleanup_vtk']:
-            print "Cleaning up *.vt*"
+            print("Cleaning up *.vt*")
             call("rm -f *.vt*", shell=True)
 
-    print "Done."
+    print("Done.")
     return

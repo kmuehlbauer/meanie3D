@@ -177,7 +177,7 @@ def setValueForKeyPath(object,keypath,value):
         # in visualisation objects. Try to set an enumerated value when hitting
         # this combination
         if type(value) is str and type(getattr(object,keypath)) is int:
-            print "Attempting to resolve constant"
+            print("Attempting to resolve constant")
             value = getattr(object,value)
 
         if type(object) is dict:

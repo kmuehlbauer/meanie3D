@@ -1,6 +1,15 @@
-FIND_PATH(RADOLAN_INCLUDE_DIR radolan.h PATHS /usr/include/radolan /usr/local/include/radolan /opt/local/include/radolan)
-
-FIND_LIBRARY(RADOLAN NAMES radolan PATHS /usr/lib /usr/local/lib /opt/local/lib)
+MESSAGE(STATUS "RADOLAN PATH: ${PATHS}")
+IF(CMAKE_SYSTEM_NAME MATCHES Linux)
+    FIND_PATH(RADOLAN_INCLUDE_DIR radolan.h PATHS /usr/include /usr/local/include /opt/local/include PATH_SUFFIXES radolan)
+    FIND_LIBRARY(RADOLAN NAMES radolan PATHS /usr/lib /usr/local/lib /opt/local/lib)
+ELSE(CMAKE_SYSTEM_NAME MATCHES Linux)
+    FIND_PATH(RADOLAN_INCLUDE_DIR radolan.h PATHS /usr/include /usr/local/include /opt/local/include PATH_SUFFIXES radolan)
+    FIND_LIBRARY(RADOLAN NAMES radolan PATHS /usr/lib /usr/local/lib /opt/local/lib)
+ENDIF(CMAKE_SYSTEM_NAME MATCHES Linux)
+    
+    
+MESSAGE(STATUS "RADOLAN Library: ${RADOLAN}")
+MESSAGE(STATUS "RADOLAN Include: ${RADOLAN_INCLUDE_DIR}")
 
 IF (RADOLAN)
    SET(RADOLAN_LIBRARIES ${RADOLAN})

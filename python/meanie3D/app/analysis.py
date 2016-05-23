@@ -56,11 +56,11 @@ def usage():
     Prints help and exits
     :return:
     '''
-    print "meanie3D-trackgraph -f <tracking dictionary file>"
-    print "Analyses a track dictionary and shows a track graph with splits, merges etc."
-    print "-f : tracking dictionary file"
-    print "--help, -h  : print this message and exits."
-    print "--version   : prints the version information and exits"
+    print("meanie3D-trackgraph -f <tracking dictionary file>")
+    print("Analyses a track dictionary and shows a track graph with splits, merges etc.")
+    print("-f : tracking dictionary file")
+    print("--help, -h  : print this message and exits.")
+    print("--version   : prints the version information and exits")
     sys.exit(1)
     return
 
