@@ -65,8 +65,8 @@ OPTION(WITH_OPENCV "Legacy option. Leave at OFF" OFF)
 # -------------------------------------
 
 ADD_SUBDIRECTORY(python)
-ADD_SUBDIRECTORY(radolan)
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/radolan/include)
+#ADD_SUBDIRECTORY(radolan)
+#INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/radolan/include)
 
 # ------------------------------------- 
 # Multithreading / Parallelism Choices
@@ -178,6 +178,7 @@ ENDIF(HDF5_FOUND)
 FIND_PACKAGE(Boost COMPONENTS program_options thread filesystem system)
 IF(Boost_FOUND)
     INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIR})
+    MESSAGE(STATUS "Found Boost: ${Boost_LIBRARIES}")
 ELSE(Boost_FOUND)
     MESSAGE(FATAL_ERROR ${Boost_ERROR_REASON})
 ENDIF()
@@ -242,6 +243,14 @@ IF (Blitz_FOUND)
     INCLUDE_DIRECTORIES(${Blitz_INCLUDE_DIR})
 ELSE()
     MESSAGE(FATAL_ERROR "blitz++ not found")
+ENDIF()
+
+# Radolan
+FIND_PACKAGE(RADOLAN REQUIRED)
+IF (RADOLAN_FOUND)
+    INCLUDE_DIRECTORIES(${RADOLAN_INCLUDE_DIR})
+ELSE()
+    MESSAGE(FATAL_ERROR "libradolan not found")
 ENDIF()
 
 # Shapefile
@@ -517,12 +526,15 @@ SOURCE_GROUP("meanie3d/weights" FILES
 # ------------------------------------------------------------- #
 
 TARGET_LINK_LIBRARIES(meanie3D
-    radolan
+    ${RADOLAN_LIBRARIES}
     ${Boost_LIBRARIES}
     ${VTK_LIBRARIES}
     ${Blitz_LIBRARY}
+    ${HDF5_LIBRARIES}
+    ${NETCDF_LIBRARIES}
     ${OpenCV_LIBRARIES}
-    ${OpenMP_RT_LIBRARIES})
+    ${OpenMP_RT_LIBRARIES}
+    ${FLANN_LIBRARIES})
 #SET_TARGET_PROPERTIES(meanie3D PROPERTIES LINKER_LANGUAGE CXX)
 
 # Conversion tool
@@ -533,10 +545,11 @@ ADD_EXECUTABLE(meanie3D-radolan2cfm
 
 TARGET_LINK_LIBRARIES(meanie3D-radolan2cfm
     meanie3D
-    radolan
+    ${RADOLAN_LIBRARIES}
     ${Boost_LIBRARIES}
     ${VTK_LIBRARIES}
     ${HDF5_LIBRARIES}
+    ${Blitz_LIBRARY}
     ${NETCDF_LIBRARIES})
 SET_TARGET_PROPERTIES(meanie3D-radolan2cfm PROPERTIES LINKER_LANGUAGE CXX)
 
@@ -548,10 +561,14 @@ ADD_EXECUTABLE(meanie3D-detect
 TARGET_LINK_LIBRARIES(meanie3D-detect
     meanie3D
     ${Boost_LIBRARIES}
+    ${RADOLAN_LIBRARIES}
+    ${Blitz_LIBRARY}
     ${VTK_LIBRARIES}
     ${HDF5_LIBRARIES}
     ${NETCDF_LIBRARIES}
-    ${OpenMP_RT_LIBRARIES})
+    ${OpenMP_RT_LIBRARIES}
+    ${OpenCV_LIBRARIES}
+    ${FLANN_LIBRARIES})
 SET_TARGET_PROPERTIES(meanie3D-detect PROPERTIES LINKER_LANGUAGE CXX)
 
 # tracking tool
@@ -815,24 +832,24 @@ ENDIF(TESTS_ENABLED)
 #INSTALL(DIRECTORY ${PROJECT_BINARY_DIR}/${PROJECT_NAME} 
 #    DESTINATION "/usr/local/include")
 
-INSTALL(DIRECTORY include/${PROJECT_NAME}
-        DESTINATION "/usr/local/include"
-        PATTERN ".svn" EXCLUDE
-        PATTERN ".git" EXCLUDE
-        PATTERN "*.swp" EXCLUDE)
+#INSTALL(DIRECTORY include/${PROJECT_NAME}
+#        DESTINATION "/usr/local/include"
+#        PATTERN ".svn" EXCLUDE
+#        PATTERN ".git" EXCLUDE
+#        PATTERN "*.swp" EXCLUDE)
 
-INSTALL(TARGETS meanie3D LIBRARY DESTINATION "/usr/local/lib")
-INSTALL(TARGETS meanie3D-detect RUNTIME DESTINATION "/usr/local/bin")
-INSTALL(TARGETS meanie3D-track RUNTIME DESTINATION "/usr/local/bin")
-INSTALL(TARGETS meanie3D-trackstats RUNTIME DESTINATION "/usr/local/bin")
-INSTALL(TARGETS meanie3D-trackstats-conrad RUNTIME DESTINATION "/usr/local/bin")
-INSTALL(TARGETS meanie3D-timestamp RUNTIME DESTINATION "/usr/local/bin")
-INSTALL(TARGETS meanie3D-parallax_correction RUNTIME DESTINATION "/usr/local/bin")
-INSTALL(TARGETS meanie3D-minmax RUNTIME DESTINATION "/usr/local/bin")
-INSTALL(TARGETS meanie3D-satconv RUNTIME DESTINATION "/usr/local/bin")
-INSTALL(TARGETS meanie3D-radolan2cfm RUNTIME DESTINATION "/usr/local/bin")
+INSTALL(TARGETS meanie3D LIBRARY DESTINATION "lib")
+INSTALL(TARGETS meanie3D-detect RUNTIME DESTINATION "bin")
+INSTALL(TARGETS meanie3D-track RUNTIME DESTINATION "bin")
+INSTALL(TARGETS meanie3D-trackstats RUNTIME DESTINATION "bin")
+INSTALL(TARGETS meanie3D-trackstats-conrad RUNTIME DESTINATION "bin")
+INSTALL(TARGETS meanie3D-timestamp RUNTIME DESTINATION "bin")
+INSTALL(TARGETS meanie3D-parallax_correction RUNTIME DESTINATION "bin")
+INSTALL(TARGETS meanie3D-minmax RUNTIME DESTINATION "bin")
+INSTALL(TARGETS meanie3D-satconv RUNTIME DESTINATION "bin")
+INSTALL(TARGETS meanie3D-radolan2cfm RUNTIME DESTINATION "bin")
 IF (WITH_VTK)
-INSTALL(TARGETS meanie3D-cfm2vtk RUNTIME DESTINATION "/usr/local/bin")
+INSTALL(TARGETS meanie3D-cfm2vtk RUNTIME DESTINATION "bin")
 ENDIF(WITH_VTK)
 
 # ------------------------------------------------------------- #

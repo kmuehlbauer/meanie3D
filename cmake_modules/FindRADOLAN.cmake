@@ -1,5 +1,4 @@
-FIND_PATH(RADOLAN_INCLUDE_DIR radolan.h PATHS /usr/include/radolan /usr/local/include/radolan /opt/local/include/radolan)
-
+FIND_PATH(RADOLAN_INCLUDE_DIR radolan.h PATHS /usr/include /usr/local/include /opt/local/include PATH_SUFFIXES radolan)
 FIND_LIBRARY(RADOLAN NAMES radolan PATHS /usr/lib /usr/local/lib /opt/local/lib)
 
 IF (RADOLAN)

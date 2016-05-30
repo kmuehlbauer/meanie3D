@@ -36,7 +36,8 @@ import meanie3D.app.utils
 import meanie3D.app.postprocessing
 
 # Make sure the C++ executables are installed
-meanie3D.app.external.locateCommands(["meanie3D-detect","meanie3D-track","meanie3D-cfm2vtk","meanie3D-trackstats","rm"])
+#meanie3D.app.external.locateCommands(["meanie3D-detect","meanie3D-track","meanie3D-cfm2vtk","meanie3D-trackstats","rm"])
+meanie3D.app.external.locateCommands(["meanie3D-detect","meanie3D-track","meanie3D-trackstats","rm"])
 
 # ----------------------------------------------------------------------------
 ## Prints usage and exits

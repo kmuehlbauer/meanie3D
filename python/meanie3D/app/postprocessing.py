@@ -39,7 +39,9 @@ from meanie3D.app import external
 
 # ----------------------------------------------------------------------------
 
-external.locateCommands(['meanie3D-cfm2vtk', 'meanie3D-trackstats', 'gnuplot'])
+#external.locateCommands(['meanie3D-cfm2vtk', 'meanie3D-trackstats', 'gnuplot'])
+# Todo: do not search for cfm2vtk if it is not compiled in, needs fix if compiled in
+external.locateCommands(['meanie3D-trackstats', 'gnuplot'])
 if __have_visit__:
     import visit
     external.locateCommands(['visit'])

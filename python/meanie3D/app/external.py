@@ -55,6 +55,10 @@ def __command_search_paths():
            '/sbin',
            '/usr/local/visit/bin',
            '/Applications/VisIt.app/Contents/Resources/bin']
+    # use conda env path
+    if os.environ.get('CONDA_ENV_PATH', False):
+        paths.insert(0, os.environ['CONDA_ENV_PATH'] + '/bin')
+    print("__command_search_paths: ", paths)
     return paths
 
 # -------------------------------------------------------------------
